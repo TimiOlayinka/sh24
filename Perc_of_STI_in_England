@@ -1,0 +1,25 @@
+WITH goa_demo AS (select Area_of_residence,
+STI,
+Gender,
+Sexual_Orientation,
+Age_Group,
+`2022`
+FROM sh24.dbo.goa_demographic_table
+where Gender = 'Total' and Sexual_Orientation = 'Total' AND Age_Group = 'Total' and Area_of_residence = 'England'
+)
+
+, GOA_Pop AS (
+select Area_of_residence,
+'Non_STI' AS STI,
+Gender,
+Sexual_Orientation,
+Age_Group,
+`2022`
+FROM sh24.dbo.goa_population_table
+where Gender = 'Total' and Sexual_Orientation = 'Total' AND Age_Group = 'Total' and Area_of_residence = 'England'
+)
+
+Select * FROM goa_demo
+UNION ALL
+SELECT Area_of_residence, STI, Gender, Sexual_Orientation, Age_Group, `2022` - (Select sum(`2022`) from goa_demo) as `2022` FROM goa_pop
+
